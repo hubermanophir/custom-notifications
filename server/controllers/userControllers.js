@@ -1,26 +1,25 @@
 const cron = require("node-cron");
-
-const popNotificationTask = cron.schedule(randomCron(), popNotification, {
-  scheduled: false,
-});
+const { randomCron } = require("./helperFunctions");
 
 const initNotification = (req, res) => {
+  const { id } = req.body;
+  const popNotificationTask = cron.schedule(
+    randomCron(),
+    () => {
+      popNotification(id);
+    },
+    {
+      scheduled: false,
+    }
+  );
   popNotificationTask.start();
   res.send("success");
 };
 
-function popNotification() {
-  console.log("hi");
+function popNotification(socketId) {
+  io.to(socketId).emit("notification", "notification");
 }
 
-function randomNumber(min, max) {
-  return Math.floor(Math.random() * (max - min) + min);
-}
-
-function randomCron() {
-  const seconds = randomNumber(5, 10);
-  console.log(seconds);
-  return `*/${seconds} * * * * *`;
-}
+function getRandomNotification() {}
 
 module.exports = { initNotification };
