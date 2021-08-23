@@ -1,7 +1,6 @@
 const router = require("express").Router();
+const { initNotification } = require("../../controllers/userControllers");
 
-router.get("/", (req, res) => {
-  res.send("test");
-});
+router.get("/init", initNotification);
 
 module.exports = router;
