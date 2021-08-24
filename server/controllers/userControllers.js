@@ -1,25 +1,38 @@
 const cron = require("node-cron");
-const { randomCron } = require("./helperFunctions");
+const {
+  randomCron,
+  randomNumber,
+  getRandomNotification,
+} = require("./helperFunctions");
 
-const initNotification = (req, res) => {
-  const { id } = req.body;
+const notifications = require("../utils/notifications.json");
+const UserModel = require("../models/User");
+
+const initNotification = async (req, res) => {
+  const socketId = req.body.id;
+  const user = new UserModel();
+  await user.save();
+  const appearTime = randomNumber(1, 4);
   const popNotificationTask = cron.schedule(
     randomCron(),
-    () => {
-      popNotification(id);
+    async () => {
+      await popNotification(socketId, user._id, appearTime);
     },
     {
       scheduled: false,
     }
   );
   popNotificationTask.start();
-  res.send("success");
+
+  res.json({ message: "success", user });
 };
 
-function popNotification(socketId) {
-  io.to(socketId).emit("notification", "notification");
+async function popNotification(socketId, userId, appearTime) {
+  const user = await UserModel.findById(userId);
+  const userNotifications = user.notifications;
+  const notification = getRandomNotification(notifications, userNotifications);
+  notification.appearTime = appearTime;
+  io.to(socketId).emit("notification", notification);
 }
-
-function getRandomNotification() {}
 
 module.exports = { initNotification };

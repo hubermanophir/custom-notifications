@@ -7,4 +7,21 @@ function randomCron() {
   return `*/${seconds} * * * * *`;
 }
 
-module.exports = { randomCron };
+function getRandomNotification(notificationArray, userSavedNotification) {
+  let filtered = [];
+  if (userSavedNotification.length > 0) {
+    userSavedNotification.forEach((notification) => {
+      filtered = notificationArray.filter(
+        (elem) =>
+          elem.type !== notification.type && elem.text !== notification.text
+      );
+    });
+  } else {
+    filtered = notificationArray;
+  }
+  const index = Math.floor(Math.random() * filtered.length);
+
+  return filtered[index];
+}
+
+module.exports = { randomCron, randomNumber, getRandomNotification };
