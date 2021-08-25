@@ -3,6 +3,7 @@ const {
   randomCron,
   randomNumber,
   getRandomNotification,
+  manipulateText,
 } = require("./helperFunctions");
 
 const notifications = require("../utils/notifications.json");

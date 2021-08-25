@@ -20,4 +20,26 @@ function getRandomNotification(notificationArray, userSavedNotification) {
   return filtered[index];
 }
 
-module.exports = { randomCron, randomNumber, getRandomNotification };
+function manipulateText(text) {
+  if (text.match(/sale/i)) {
+    return text + "!";
+  } else if (text.match(/new/i)) {
+    return "~~" + text + "~~";
+  } else if (text.match(/limited edition/i)) {
+    const original = text.split("");
+    const lowerCase = original.map((str) => str.toLowerCase());
+    const limitedIndex = lowerCase.indexOf("limited");
+    original[limitedIndex] = original[limitedIndex].toUpperCase();
+    original[limitedIndex + 1] = original[limitedIndex + 1].toUpperCase();
+    return original.join(" ");
+  } else {
+    return text
+  }
+}
+
+module.exports = {
+  randomCron,
+  randomNumber,
+  getRandomNotification,
+  manipulateText,
+};

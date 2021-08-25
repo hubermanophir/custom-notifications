@@ -18,6 +18,8 @@ export default function Notification({
   setNotificationVisible,
   userId,
   notification,
+  setSkipped,
+  skipped,
 }) {
   const classes = useStyles();
   const clickHandler = async () => {
@@ -26,8 +28,31 @@ export default function Notification({
       userId,
       notification,
     });
+    if (skipped === 3) {
+      setSkipped(1);
+    } else {
+      setSkipped((prev) => (prev += 1));
+    }
   };
 
+  const manipulateText = (text) => {
+    let temp = text;
+    if (temp.match(/sale/i)) {
+      temp = temp + "!";
+    }
+    if (temp.match(/new/i)) {
+      temp = "~~" + temp + "~~";
+    }
+    if (temp.toLowerCase().includes("limited edition")) {
+      const original = temp.split(" ");
+      const lowerCase = original.map((str) => str.toLowerCase());
+      const limitedIndex = lowerCase.indexOf("limited");
+      original[limitedIndex] = original[limitedIndex].toUpperCase();
+      original[limitedIndex + 1] = original[limitedIndex + 1].toUpperCase();
+      temp = original.join(" ");
+    }
+    return temp;
+  };
   return (
     <div className={classes.root}>
       <MuiAlert
@@ -36,7 +61,7 @@ export default function Notification({
         variant="filled"
         severity={type}
       >
-        {text}
+        {manipulateText(text)}
       </MuiAlert>
     </div>
   );
