@@ -11,10 +11,10 @@ export default function Main() {
   const [skipped, setSkipped] = useState(0);
 
   const init = async () => {
-    const newSocket = io.connect(`http://localhost:8080/`);
+    const newSocket = io.connect(`/`);
     newSocket.on("connect", async (data) => {
       console.log("Connected to server");
-      const res = await axios.post(`http://localhost:8080/api/v1/user/init`, {
+      const res = await axios.post(`/api/v1/user/init`, {
         id: newSocket.id,
       });
       setUserId(res.data.user._id);
