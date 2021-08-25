@@ -1,7 +1,7 @@
 require("dotenv").config();
 const app = require("./app");
 const server = require("http").createServer(app);
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 const mongoose = require("mongoose");
 
 //Defining global io for socket
