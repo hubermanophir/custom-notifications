@@ -25,7 +25,7 @@ export default function Notification({
 
   const clickHandler = async () => {
     setNotificationVisible(false);
-    await axios.post("http://localhost:8080/api/v1/user/notification", {
+    await axios.post("/api/v1/user/notification", {
       userId,
       notification,
     });
