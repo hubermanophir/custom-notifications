@@ -22,6 +22,7 @@ export default function Notification({
   skipped,
 }) {
   const classes = useStyles();
+
   const clickHandler = async () => {
     setNotificationVisible(false);
     await axios.post("http://localhost:8080/api/v1/user/notification", {

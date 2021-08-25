@@ -3,12 +3,12 @@ const {
   randomCron,
   randomNumber,
   getRandomNotification,
-  manipulateText,
 } = require("./helperFunctions");
 
 const notifications = require("../utils/notifications.json");
 const UserModel = require("../models/User");
 
+//Initiating notification sending
 const initNotification = async (req, res) => {
   const socketId = req.body.id;
   const user = new UserModel();
@@ -24,7 +24,6 @@ const initNotification = async (req, res) => {
     }
   );
   popNotificationTask.start();
-
   res.json({ message: "success", user });
 };
 

@@ -9,34 +9,31 @@ export default function Main() {
   const [notificationVisible, setNotificationVisible] = useState(false);
   const [skipped, setSkipped] = useState(0);
 
-  useEffect(() => {
-    (async () => {
-      const newSocket = io.connect("http://localhost:8080");
-      newSocket.on("connect", async (data) => {
-        console.log("Connected to socket");
-        const res = await axios.post("http://localhost:8080/api/v1/user/init", {
-          id: newSocket.id,
-        });
-        setUserId(res.data.user._id);
-        newSocket.on("notification", (data) => {
-          if (data) {
-            console.log(data);
-            setSkipped((prev) =>
-              prev === 1
-                ? (prev += 1)
-                : prev === 2
-                ? (prev += 1)
-                : (prev = prev)
-            );
-            setNotification(data);
-            setNotificationVisible(true);
-          }
-        });
-        newSocket.on("disconnect", () => {
-          console.log("Disconnected from socket");
-        });
+  const init = async () => {
+    const newSocket = io.connect("/");
+    newSocket.on("connect", async (data) => {
+      console.log("Connected to server");
+      const res = await axios.post("/api/v1/user/init", {
+        id: newSocket.id,
       });
-    })();
+      setUserId(res.data.user._id);
+      newSocket.on("notification", (data) => {
+        if (data) {
+          setSkipped((prev) =>
+            prev === 1 ? (prev += 1) : prev === 2 ? (prev += 1) : prev
+          );
+          setNotification(data);
+          setNotificationVisible(true);
+        }
+      });
+      newSocket.on("disconnect", () => {
+        console.log("Disconnected from server");
+      });
+    });
+  };
+
+  useEffect(() => {
+    init();
   }, []);
 
   useEffect(() => {
@@ -46,6 +43,7 @@ export default function Main() {
       }, notification.appearTime * 1000);
     }
   }, [notification]);
+
   return (
     <div>
       {skipped !== 2 && notificationVisible && (

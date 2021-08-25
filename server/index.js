@@ -13,6 +13,10 @@ io.on("connection", (socket) => {
   console.log("socket connected");
 });
 
+io.on("error", (err) => {
+  console.log(err);
+});
+
 server.listen(PORT, () => {
   mongoose
     .connect(process.env.MONGO_URI, {
