@@ -7,8 +7,7 @@ export default function Main() {
   const [userId, setUserId] = useState();
   const [notification, setNotification] = useState();
   const [notificationVisible, setNotificationVisible] = useState(false);
-
-  useEffect(async () => {
+  const init = async () => {
     const newSocket = io.connect("http://localhost:8080");
     newSocket.on("connect", async (data) => {
       console.log("Connected to socket");
@@ -17,7 +16,6 @@ export default function Main() {
       });
       setUserId(res.data.user._id);
       newSocket.on("notification", (data) => {
-        console.log(data);
         if (data) {
           setNotification(data);
           setNotificationVisible(true);
@@ -27,6 +25,9 @@ export default function Main() {
         console.log("Disconnected from socket");
       });
     });
+  };
+  useEffect(() => {
+    init();
   }, []);
 
   useEffect(() => {
