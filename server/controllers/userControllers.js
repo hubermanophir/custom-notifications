@@ -27,6 +27,14 @@ const initNotification = async (req, res) => {
   res.json({ message: "success", user });
 };
 
+const clickNotification = async (req, res) => {
+  const { userId, notification } = req.body;
+  const user = await UserModel.findById(userId);
+  user.notifications.push(notification);
+  await user.save();
+  res.json({ message: "Success" });
+};
+
 async function popNotification(socketId, userId, appearTime) {
   const user = await UserModel.findById(userId);
   const userNotifications = user.notifications;
@@ -35,4 +43,4 @@ async function popNotification(socketId, userId, appearTime) {
   io.to(socketId).emit("notification", notification);
 }
 
-module.exports = { initNotification };
+module.exports = { initNotification, clickNotification };

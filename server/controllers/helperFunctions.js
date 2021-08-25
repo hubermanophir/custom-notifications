@@ -8,19 +8,15 @@ function randomCron() {
 }
 
 function getRandomNotification(notificationArray, userSavedNotification) {
-  let filtered = [];
-  if (userSavedNotification.length > 0) {
+  let filtered = notificationArray;
+  if (userSavedNotification.length === notificationArray.length) {
+    return null;
+  } else if (userSavedNotification.length > 0) {
     userSavedNotification.forEach((notification) => {
-      filtered = notificationArray.filter(
-        (elem) =>
-          elem.type !== notification.type && elem.text !== notification.text
-      );
+      filtered = filtered.filter((elem) => elem.text !== notification.text);
     });
-  } else {
-    filtered = notificationArray;
   }
   const index = Math.floor(Math.random() * filtered.length);
-
   return filtered[index];
 }
 

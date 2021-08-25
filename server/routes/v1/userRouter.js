@@ -1,7 +1,10 @@
 const router = require("express").Router();
-const { initNotification } = require("../../controllers/userControllers");
+const {
+  initNotification,
+  clickNotification,
+} = require("../../controllers/userControllers");
 
 router.post("/init", initNotification);
-// router.post("/notification", )
+router.post("/notification", clickNotification);
 
 module.exports = router;
